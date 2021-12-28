@@ -47,40 +47,40 @@ layer_3_nodes = 50
 
 # Input Layer
 with tf.variable_scope('input'):
-    X =
+    X = tf.placeholder(tf.float32, shape=(None, number_of_inputs))
 
 # Layer 1
 with tf.variable_scope('layer_1'):
-    weights =
-    biases =
-    layer_1_output =
+    weights = tf.get_variable(name="weights1", shape=[number_of_inputs, layer_1_nodes], initializer=tf.contrib.layers.xavier_initializer())
+    biases = tf.get_variable(name="biases1", shape=[layer_1_nodes], initializer=tf.zeros_initializer())
+    layer_1_output = tf.nn.relu(tf.matmul(X, weights) + biases)
 
 # Layer 2
 with tf.variable_scope('layer_2'):
-
-
-
+    weights = tf.get_variable(name="weights2", shape=[layer_1_nodes, layer_2_nodes], initializer=tf.contrib.layers.xavier_initializer())
+    biases = tf.get_variable(name="biases2", shape=[layer_2_nodes], initializer=tf.zeros_initializer())
+    layer_2_output = tf.nn.relu(tf.matmul(layer_1_output, weights) + biases)
 
 # Layer 3
 with tf.variable_scope('layer_3'):
-
-
-
+    weights = tf.get_variable(name="weights3", shape=[layer_2_nodes, layer_3_nodes], initializer=tf.contrib.layers.xavier_initializer())
+    biases = tf.get_variable(name="biases3", shape=[layer_3_nodes], initializer=tf.zeros_initializer())
+    layer_3_output = tf.nn.relu(tf.matmul(layer_2_output, weights) + biases)
 
 # Output Layer
 with tf.variable_scope('output'):
-
-
-
+    weights = tf.get_variable(name="weights4", shape=[layer_3_nodes, number_of_outputs], initializer=tf.contrib.layers.xavier_initializer())
+    biases = tf.get_variable(name="biases4", shape=[number_of_outputs], initializer=tf.zeros_initializer())
+    prediction = tf.matmul(layer_3_output, weights) + biases
 
 # Section Two: Define the cost function of the neural network that will measure prediction accuracy during training
 
 with tf.variable_scope('cost'):
-    Y =
-    cost =
+    Y = tf.placeholder(tf.float32, shape=(None, 1))
+    cost = tf.reduce_mean(tf.squared_difference(prediction, Y))
 
 
 # Section Three: Define the optimizer function that will be run to optimize the neural network
 
 with tf.variable_scope('train'):
-    optimizer =
+    optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
